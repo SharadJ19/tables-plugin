@@ -9,13 +9,19 @@ export class ExportService {
 
   renderSVGString(state?: TableState): string {
     const s = state || this.tableState.snapshot;
-    const totalWidth = s.columns.reduce((a: number, c: ColumnDef) => a + c.width, 0);
-    const totalHeight = s.rows.reduce((a: number, r: RowDef) => a + r.height, 0);
+    const totalWidth = s.columns.reduce(
+      (a: number, c: ColumnDef) => a + c.width,
+      0,
+    );
+    const totalHeight = s.rows.reduce(
+      (a: number, r: RowDef) => a + r.height,
+      0,
+    );
 
     const parts: string[] = [];
     parts.push(
       `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${totalHeight}" ` +
-      `viewBox="0 0 ${totalWidth} ${totalHeight}">`,
+        `viewBox="0 0 ${totalWidth} ${totalHeight}">`,
     );
 
     let y = 0;
@@ -32,38 +38,57 @@ export class ExportService {
           style.verticalAlign === 'top'
             ? y + style.paddingY + style.fontSize
             : style.verticalAlign === 'bottom'
-            ? y + h - style.paddingY
-            : y + h / 2 + style.fontSize * 0.35;
+              ? y + h - style.paddingY
+              : y + h / 2 + style.fontSize * 0.35;
 
         const textAnchor =
           style.textAlign === 'center'
             ? 'middle'
             : style.textAlign === 'right'
-            ? 'end'
-            : 'start';
+              ? 'end'
+              : 'start';
 
         const textX =
           style.textAlign === 'center'
             ? x + w / 2
             : style.textAlign === 'right'
-            ? x + w - style.paddingX
-            : x + style.paddingX;
+              ? x + w - style.paddingX
+              : x + style.paddingX;
 
         parts.push(
           `<rect x="${x}" y="${y}" width="${w}" height="${h}" ` +
-          `fill="${style.bgColor}" stroke="${style.borderColor}" stroke-width="0.5"/>`,
+            `fill="${style.bgColor}" stroke="${style.borderColor}" stroke-width="0.5"/>`,
         );
 
         if (content) {
-          const escaped = content
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
+          const lines = content.split('\n');
+          const lineHeight = style.fontSize * 1.4;
+
+          const firstLineY =
+            style.verticalAlign === 'top'
+              ? y + style.paddingY + style.fontSize
+              : style.verticalAlign === 'bottom'
+                ? y + h - style.paddingY - (lines.length - 1) * lineHeight
+                : y +
+                  h / 2 -
+                  ((lines.length - 1) * lineHeight) / 2 +
+                  style.fontSize * 0.35;
+
+          const tspans = lines
+            .map((line: string, i: number) => {
+              const escaped = line
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+              return `<tspan x="${textX}" dy="${i === 0 ? 0 : lineHeight}">${escaped}</tspan>`;
+            })
+            .join('');
+
           parts.push(
-            `<text x="${textX}" y="${textY}" font-family="sans-serif" ` +
-            `font-size="${style.fontSize}" fill="${style.textColor}" ` +
-            `text-anchor="${textAnchor}" font-weight="${style.fontWeight}" ` +
-            `font-style="${style.fontStyle}">${escaped}</text>`,
+            `<text x="${textX}" y="${firstLineY}" font-family="sans-serif" ` +
+              `font-size="${style.fontSize}" fill="${style.textColor}" ` +
+              `text-anchor="${textAnchor}" font-weight="${style.fontWeight}" ` +
+              `font-style="${style.fontStyle}">${tspans}</text>`,
           );
         }
 
@@ -98,9 +123,13 @@ export class ExportService {
 
   downloadJPEG(scale = 2): void {
     this.renderToCanvas(scale, '#ffffff').then((canvas: HTMLCanvasElement) => {
-      canvas.toBlob((blob: Blob | null) => {
-        if (blob) this.triggerDownload(blob, 'table.jpg');
-      }, 'image/jpeg', 0.95);
+      canvas.toBlob(
+        (blob: Blob | null) => {
+          if (blob) this.triggerDownload(blob, 'table.jpg');
+        },
+        'image/jpeg',
+        0.95,
+      );
     });
   }
 
@@ -130,11 +159,20 @@ export class ExportService {
     });
   }
 
-  private renderToCanvas(scale = 2, bgColor?: string): Promise<HTMLCanvasElement> {
+  private renderToCanvas(
+    scale = 2,
+    bgColor?: string,
+  ): Promise<HTMLCanvasElement> {
     return new Promise<HTMLCanvasElement>((resolve, reject) => {
       const s = this.tableState.snapshot;
-      const totalWidth = s.columns.reduce((a: number, c: ColumnDef) => a + c.width, 0);
-      const totalHeight = s.rows.reduce((a: number, r: RowDef) => a + r.height, 0);
+      const totalWidth = s.columns.reduce(
+        (a: number, c: ColumnDef) => a + c.width,
+        0,
+      );
+      const totalHeight = s.rows.reduce(
+        (a: number, r: RowDef) => a + r.height,
+        0,
+      );
 
       const img = new Image();
       img.onload = () => {
@@ -142,7 +180,10 @@ export class ExportService {
         canvas.width = totalWidth * scale;
         canvas.height = totalHeight * scale;
         const ctx = canvas.getContext('2d');
-        if (!ctx) { reject(new Error('Canvas context unavailable')); return; }
+        if (!ctx) {
+          reject(new Error('Canvas context unavailable'));
+          return;
+        }
         if (bgColor) {
           ctx.fillStyle = bgColor;
           ctx.fillRect(0, 0, canvas.width, canvas.height);

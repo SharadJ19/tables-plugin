@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, debounceTime, Observable, Subject } from 'rxjs';
 import {
   TableState,
   CellDef,
@@ -20,10 +20,26 @@ export class TableStateService {
 
   readonly state: Observable<TableState> = this.state$.asObservable();
 
+  // Debounce subjects for noisy operations
+  private contentDebounce$ = new Subject<void>();
+  private styleDebounce$ = new Subject<void>();
+  
   constructor(
     private history: HistoryService,
     private selection: SelectionService,
-  ) {}
+  ) {
+
+    // Capture history 300ms after user stops typing
+    this.contentDebounce$
+      .pipe(debounceTime(300))
+      .subscribe(() => this.history.push(this.snapshot));
+
+    // Capture history 200ms after user stops picking color/style
+    this.styleDebounce$
+      .pipe(debounceTime(200))
+      .subscribe(() => this.history.push(this.snapshot));
+
+  }
 
   get snapshot(): TableState {
     return this.state$.value;
@@ -65,34 +81,42 @@ export class TableStateService {
   }
 
   updateCellContent(rowId: string, colId: string, content: string): void {
-    this.update((s: TableState) => {
-      const key = cellKey(rowId, colId);
-      const cells = { ...s.cells };
-      cells[key] = { ...cells[key], content };
-      return { ...s, cells };
-    });
+    // Update state immediately (no history push yet)
+    this.state$.next(
+      (() => {
+        const s = this.snapshot;
+        const key = cellKey(rowId, colId);
+        const cells = { ...s.cells };
+        cells[key] = { ...cells[key], content };
+        return { ...s, cells };
+      })()
+    );
+    // Debounce the history push
+    this.contentDebounce$.next();
   }
 
   applyStyleToSelection(patch: Partial<CellStyle>): void {
     const keys = this.selection.snapshot.cellKeys;
     if (keys.size === 0) return;
-    this.update((s: TableState) => {
-      const cells = { ...s.cells };
-      keys.forEach((key: string) => {
-        cells[key] = {
-          ...cells[key],
-          style: { ...(cells[key]?.style || {}), ...patch },
-        };
-      });
-      return { ...s, cells };
-    });
+    this.state$.next(
+      (() => {
+        const s = this.snapshot;
+        const cells = { ...s.cells };
+        keys.forEach((key: string) => {
+          cells[key] = {
+            ...cells[key],
+            style: { ...(cells[key]?.style || {}), ...patch },
+          };
+        });
+        return { ...s, cells };
+      })()
+    );
+    this.styleDebounce$.next();
   }
 
-  applyTableStyle(patch: Partial<CellStyle>): void {
-    this.update((s: TableState) => ({
-      ...s,
-      tableStyle: { ...s.tableStyle, ...patch },
-    }));
+ applyTableStyle(patch: Partial<CellStyle>): void {
+    this.state$.next({ ...this.snapshot, tableStyle: { ...this.snapshot.tableStyle, ...patch } });
+    this.styleDebounce$.next();
   }
 
   applyRowStyle(rowId: string, patch: Partial<CellStyle>): void {
