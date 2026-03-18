@@ -20,6 +20,7 @@ export class TableCellComponent implements OnChanges {
   @Output() contentChange = new EventEmitter<string>();
   @Output() editDone = new EventEmitter<void>();
 
+  
   @ViewChild('textarea') textareaRef?: ElementRef<HTMLTextAreaElement>;
 
   editValue = '';
@@ -34,7 +35,8 @@ export class TableCellComponent implements OnChanges {
           if (ta) {
             ta.focus();
             // Place cursor at end
-            ta.setSelectionRange(ta.value.length, ta.value.length);
+            ta.setSelectionRange(0, 0);
+            ta.scrollTop = 0;
           }
         }, 0);
       }
