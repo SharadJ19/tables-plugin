@@ -2,7 +2,9 @@
   display: inline-block;
   outline: none;
   background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.06);
   border-radius: 4px;
   overflow: visible;
   user-select: none;
@@ -39,7 +41,7 @@
 
   &:hover {
     background: #f3f4f6;
-    color: #FF9100;
+    color: #ff9100;
   }
 }
 
@@ -64,7 +66,7 @@
 
   &--selected {
     background: #fff7ed;
-    color: #FF9100;
+    color: #ff9100;
     border-color: #fdba74;
   }
 }
@@ -104,7 +106,7 @@
   justify-content: center;
   width: 14px;
   height: 14px;
-  background: #FF9100;
+  background: #ff9100;
   color: #fff;
   border-radius: 3px;
   font-size: 9px;
@@ -119,15 +121,83 @@
   vertical-align: middle;
 
   &--selected {
-    outline: 2px solid #FF9100;
+    outline: 2px solid #ff9100;
     outline-offset: -1px;
     z-index: 1;
   }
 
   &--focused {
-    outline: 2px solid #FF9100;
+    outline: 2px solid #ff9100;
     outline-offset: -1px;
     z-index: 2;
     box-shadow: 0 0 0 3px rgba(255, 145, 0, 0.15);
+  }
+}
+
+.header-actions {
+  position: absolute;
+  top: 50%;
+  right: 3px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  z-index: 30;
+
+  &--row {
+    flex-direction: column;
+    top: 3px;
+    right: 3px;
+    transform: none;
+  }
+}
+
+.col-header:hover .header-actions,
+.row-header:hover .header-actions {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.header-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  background: #fff;
+  color: #6b7280;
+  transition:
+    background 0.1s,
+    color 0.1s,
+    border-color 0.1s;
+
+  &--add {
+    &:hover {
+      background: #f0fdf4;
+      color: #16a34a;
+      border-color: #16a34a;
+    }
+  }
+
+  &--del {
+    &:hover:not(:disabled) {
+      background: #fef2f2;
+      color: #ef4444;
+      border-color: #ef4444;
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
   }
 }

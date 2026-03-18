@@ -11,9 +11,17 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TableStateService } from '../../services/table-state.service';
 import { SelectionService } from '../../services/selection.service';
-import { TableState, ColumnDef, RowDef, cellKey } from '../../models/table.model';
+import {
+  TableState,
+  ColumnDef,
+  RowDef,
+  cellKey,
+} from '../../models/table.model';
 import { Selection } from '../../models/selection.model';
-import { resolveStyle, styleToCSS } from '../../shared/utils/style-resolver.util';
+import {
+  resolveStyle,
+  styleToCSS,
+} from '../../shared/utils/style-resolver.util';
 
 interface FocusedCell {
   rowId: string;
@@ -60,6 +68,22 @@ export class TableCanvasComponent implements OnInit, OnDestroy {
       });
   }
 
+  onAddColAfter(colId: string): void {
+    this.tableState.addColumn(colId);
+  }
+
+  onDeleteCol(colId: string): void {
+    this.tableState.deleteColumn(colId);
+  }
+
+  onAddRowAfter(rowId: string): void {
+    this.tableState.addRow(rowId);
+  }
+
+  onDeleteRow(rowId: string): void {
+    this.tableState.deleteRow(rowId);
+  }
+
   getCellStyles(rowId: string, colId: string): Record<string, string> {
     if (!this.state) return {};
     return styleToCSS(resolveStyle(this.state, rowId, colId));
@@ -82,7 +106,9 @@ export class TableCanvasComponent implements OnInit, OnDestroy {
   }
 
   getColWidth(colId: string): number {
-    return this.state.columns.find((c: ColumnDef) => c.id === colId)?.width ?? 120;
+    return (
+      this.state.columns.find((c: ColumnDef) => c.id === colId)?.width ?? 120
+    );
   }
 
   getRowHeight(rowId: string): number {
@@ -214,22 +240,32 @@ export class TableCanvasComponent implements OnInit, OnDestroy {
 
       case 'ArrowUp':
         event.preventDefault();
-        if (this.editingCell) { this.exitEdit(); }
+        if (this.editingCell) {
+          this.exitEdit();
+        }
         this.moveSelection('up');
         break;
 
       case 'ArrowDown':
         event.preventDefault();
-        if (this.editingCell) { this.exitEdit(); }
+        if (this.editingCell) {
+          this.exitEdit();
+        }
         this.moveSelection('down');
         break;
 
       case 'ArrowLeft':
-        if (!this.editingCell) { event.preventDefault(); this.moveSelection('left'); }
+        if (!this.editingCell) {
+          event.preventDefault();
+          this.moveSelection('left');
+        }
         break;
 
       case 'ArrowRight':
-        if (!this.editingCell) { event.preventDefault(); this.moveSelection('right'); }
+        if (!this.editingCell) {
+          event.preventDefault();
+          this.moveSelection('right');
+        }
         break;
 
       case 'Delete':
@@ -258,7 +294,9 @@ export class TableCanvasComponent implements OnInit, OnDestroy {
     const rows = this.state.rows;
     const cols = this.state.columns;
     const ri = rows.findIndex((r: RowDef) => r.id === this.focusedCell!.rowId);
-    const ci = cols.findIndex((c: ColumnDef) => c.id === this.focusedCell!.colId);
+    const ci = cols.findIndex(
+      (c: ColumnDef) => c.id === this.focusedCell!.colId,
+    );
 
     let nr = ri;
     let nc = ci;
@@ -281,9 +319,11 @@ export class TableCanvasComponent implements OnInit, OnDestroy {
   }
 
   exitEdit(): void {
-      this.editingCell = null;
-      // Re-focus the canvas wrapper so arrow key navigation works
-      (this.el.nativeElement.querySelector('.canvas-wrapper') as HTMLElement)?.focus();
+    this.editingCell = null;
+    // Re-focus the canvas wrapper so arrow key navigation works
+    (
+      this.el.nativeElement.querySelector('.canvas-wrapper') as HTMLElement
+    )?.focus();
   }
 
   onCellDoubleClick(rowId: string, colId: string): void {
