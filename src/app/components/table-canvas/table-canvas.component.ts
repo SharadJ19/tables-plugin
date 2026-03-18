@@ -281,7 +281,9 @@ export class TableCanvasComponent implements OnInit, OnDestroy {
   }
 
   exitEdit(): void {
-    this.editingCell = null;
+      this.editingCell = null;
+      // Re-focus the canvas wrapper so arrow key navigation works
+      (this.el.nativeElement.querySelector('.canvas-wrapper') as HTMLElement)?.focus();
   }
 
   onCellDoubleClick(rowId: string, colId: string): void {
