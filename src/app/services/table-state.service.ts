@@ -20,22 +20,16 @@ export class TableStateService {
 
   readonly state: Observable<TableState> = this.state$.asObservable();
 
-  // Debounce subjects for noisy operations
+  // for noisy operations
   private contentDebounce$ = new Subject<void>();
-  private styleDebounce$ = new Subject<void>();
   
   constructor(
     private history: HistoryService,
     private selection: SelectionService,
   ) {
 
-    // Capture history 300ms after user stops typing
+    // Capture history 100ms after user stops typing
     this.contentDebounce$
-      .pipe(debounceTime(150))
-      .subscribe(() => this.history.push(this.snapshot));
-
-    // Capture history 200ms after user stops picking color/style
-    this.styleDebounce$
       .pipe(debounceTime(100))
       .subscribe(() => this.history.push(this.snapshot));
 
@@ -98,25 +92,23 @@ export class TableStateService {
   applyStyleToSelection(patch: Partial<CellStyle>): void {
     const keys = this.selection.snapshot.cellKeys;
     if (keys.size === 0) return;
-    this.state$.next(
-      (() => {
-        const s = this.snapshot;
-        const cells = { ...s.cells };
-        keys.forEach((key: string) => {
-          cells[key] = {
-            ...cells[key],
-            style: { ...(cells[key]?.style || {}), ...patch },
-          };
-        });
-        return { ...s, cells };
-      })()
-    );
-    this.styleDebounce$.next();
+    this.update((s: TableState) => {
+      const cells = { ...s.cells };
+      keys.forEach((key: string) => {
+        cells[key] = {
+          ...cells[key],
+          style: { ...(cells[key]?.style || {}), ...patch },
+        };
+      });
+      return { ...s, cells };
+    });
   }
 
  applyTableStyle(patch: Partial<CellStyle>): void {
-    this.state$.next({ ...this.snapshot, tableStyle: { ...this.snapshot.tableStyle, ...patch } });
-    this.styleDebounce$.next();
+    this.update((s: TableState) => ({
+      ...s,
+      tableStyle: { ...s.tableStyle, ...patch },
+    }));
   }
 
   applyRowStyle(rowId: string, patch: Partial<CellStyle>): void {
