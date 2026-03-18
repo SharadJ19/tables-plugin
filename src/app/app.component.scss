@@ -28,6 +28,14 @@
   border-right: 1px solid #e5e7eb;
   background: #fafafa;
   z-index: 10;
+  transition: width 0.2s ease, opacity 0.2s ease;
+
+  &.panel--closed {
+    width: 0 !important;
+    opacity: 0;
+    pointer-events: none;
+    border-right: none;
+  }
 }
 
 .app-canvas-area {
@@ -48,4 +56,42 @@
   border-left: 1px solid #e5e7eb;
   background: #fafafa;
   z-index: 10;
+  transition: width 0.2s ease, opacity 0.2s ease;
+
+  &.panel--closed {
+    width: 0 !important;
+    opacity: 0;
+    pointer-events: none;
+    border-left: none;
+  }
+}
+
+.panel-toggle {
+  flex-shrink: 0;
+  width: 16px;
+  border: none;
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  z-index: 20;
+  align-self: stretch;
+
+  &:hover {
+    background: #e5e7eb;
+    color: #FF9100;
+  }
+
+  &--left {
+    border-left: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+  }
+
+  &--right {
+    border-left: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+  }
 }

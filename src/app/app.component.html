@@ -1,10 +1,40 @@
 <div class="app-shell">
   <app-toolbar class="app-toolbar"></app-toolbar>
   <div class="app-body">
-    <app-left-panel class="app-left-panel"></app-left-panel>
+
+    <app-left-panel
+      class="app-left-panel"
+      [class.panel--closed]="!leftOpen">
+    </app-left-panel>
+
+    <button class="panel-toggle panel-toggle--left"
+            (click)="leftOpen = !leftOpen"
+            [title]="leftOpen ? 'Close left panel' : 'Open left panel'">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path [attr.d]="leftOpen ? 'M8 2L4 6l4 4' : 'M4 2l4 4-4 4'"
+              stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
     <main class="app-canvas-area">
       <app-table-canvas></app-table-canvas>
     </main>
-    <app-right-panel class="app-right-panel"></app-right-panel>
+
+    <button class="panel-toggle panel-toggle--right"
+            (click)="rightOpen = !rightOpen"
+            [title]="rightOpen ? 'Close right panel' : 'Open right panel'">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path [attr.d]="rightOpen ? 'M4 2l4 4-4 4' : 'M8 2L4 6l4 4'"
+              stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <app-right-panel
+      class="app-right-panel"
+      [class.panel--closed]="!rightOpen">
+    </app-right-panel>
+
   </div>
 </div>

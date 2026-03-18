@@ -9,6 +9,9 @@ import { SelectionService } from './services/selection.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  leftOpen = true;
+  rightOpen = true;
+  
   constructor(
     private tableState: TableStateService,
     private pluginBridge: PluginBridgeService,
