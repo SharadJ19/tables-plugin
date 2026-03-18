@@ -1,0 +1,51 @@
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #fafafa;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 13px;
+  color: #1a1a1a;
+}
+
+.app-toolbar {
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.app-left-panel {
+  flex-shrink: 0;
+  width: 220px;
+  overflow-y: auto;
+  border-right: 1px solid #e5e7eb;
+  background: #fafafa;
+  z-index: 10;
+}
+
+.app-canvas-area {
+  flex: 1;
+  overflow: auto;
+  background: #f3f4f6;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 20px;
+  min-width: 0;
+}
+
+.app-right-panel {
+  flex-shrink: 0;
+  width: 240px;
+  overflow-y: auto;
+  border-left: 1px solid #e5e7eb;
+  background: #fafafa;
+  z-index: 10;
+}

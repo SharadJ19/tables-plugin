@@ -1,0 +1,260 @@
+<div class="right-panel" *ngIf="state">
+
+  <!-- Selection indicator -->
+  <div class="selection-indicator" [class.active]="hasSelection">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2.5 1.5"/>
+    </svg>
+    {{ selectionLabel }}
+    <span class="indicator-hint" *ngIf="!hasSelection">&nbsp;— editing table defaults</span>
+  </div>
+
+  <!-- Text & Color -->
+  <div class="panel-section">
+    <div class="section-header" (click)="toggleStyle()">
+      <span class="section-title">Text & Color</span>
+      <svg class="chevron" [class.chevron--open]="styleExpanded" width="12" height="12" viewBox="0 0 12 12">
+        <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.4"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="section-body" *ngIf="styleExpanded">
+
+      <div class="field-row">
+        <label class="field-label">Background</label>
+        <div class="color-row">
+          <input type="color" class="color-swatch"
+                 [value]="currentStyle.bgColor"
+                 (input)="onBgColor($any($event.target).value)">
+          <input type="text" class="color-text"
+                 [value]="currentStyle.bgColor"
+                 (change)="onBgColor($any($event.target).value)">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">Text color</label>
+        <div class="color-row">
+          <input type="color" class="color-swatch"
+                 [value]="currentStyle.textColor"
+                 (input)="onTextColor($any($event.target).value)">
+          <input type="text" class="color-text"
+                 [value]="currentStyle.textColor"
+                 (change)="onTextColor($any($event.target).value)">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">Font size</label>
+        <div class="field-input-row">
+          <input class="field-input field-input--sm" type="number" min="8" max="72"
+                 [value]="currentStyle.fontSize"
+                 (change)="onFontSize($any($event.target).value)">
+          <span class="field-unit">px</span>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">Style</label>
+        <div class="btn-group">
+          <button class="style-btn" [class.active]="currentStyle.fontWeight === 'bold'"
+                  (click)="onFontWeight(currentStyle.fontWeight === 'bold' ? 'normal' : 'bold')"
+                  title="Bold">
+            <strong>B</strong>
+          </button>
+          <button class="style-btn" [class.active]="currentStyle.fontStyle === 'italic'"
+                  (click)="onFontStyle(currentStyle.fontStyle === 'italic' ? 'normal' : 'italic')"
+                  title="Italic">
+            <em>I</em>
+          </button>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">Align</label>
+        <div class="btn-group">
+          <button class="style-btn" [class.active]="currentStyle.textAlign === 'left'"
+                  (click)="onTextAlign('left')" title="Left">
+            <svg width="13" height="13" viewBox="0 0 13 13">
+              <path d="M1 3h11M1 6.5h7M1 10h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button class="style-btn" [class.active]="currentStyle.textAlign === 'center'"
+                  (click)="onTextAlign('center')" title="Center">
+            <svg width="13" height="13" viewBox="0 0 13 13">
+              <path d="M1 3h11M3 6.5h7M1 10h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button class="style-btn" [class.active]="currentStyle.textAlign === 'right'"
+                  (click)="onTextAlign('right')" title="Right">
+            <svg width="13" height="13" viewBox="0 0 13 13">
+              <path d="M1 3h11M5 6.5h7M1 10h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label class="field-label">Vertical</label>
+        <div class="btn-group">
+          <button class="style-btn" [class.active]="currentStyle.verticalAlign === 'top'"
+                  (click)="onVerticalAlign('top')" title="Top">
+            <svg width="13" height="13" viewBox="0 0 13 13">
+              <path d="M1 2h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M5 4v7M8 4v7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button class="style-btn" [class.active]="currentStyle.verticalAlign === 'middle'"
+                  (click)="onVerticalAlign('middle')" title="Middle">
+            <svg width="13" height="13" viewBox="0 0 13 13">
+              <path d="M1 6.5h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M5 2v9M8 2v9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <button class="style-btn" [class.active]="currentStyle.verticalAlign === 'bottom'"
+                  (click)="onVerticalAlign('bottom')" title="Bottom">
+            <svg width="13" height="13" viewBox="0 0 13 13">
+              <path d="M1 11h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M5 2v7M8 2v7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Border -->
+  <div class="panel-section">
+    <div class="section-header" (click)="toggleBorder()">
+      <span class="section-title">Border</span>
+      <svg class="chevron" [class.chevron--open]="borderExpanded" width="12" height="12" viewBox="0 0 12 12">
+        <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.4"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="section-body" *ngIf="borderExpanded">
+
+      <div class="field-row">
+        <label class="field-label">Border color</label>
+        <div class="color-row">
+          <input type="color" class="color-swatch"
+                 [value]="currentStyle.borderColor"
+                 (input)="onBorderColor($any($event.target).value)">
+          <input type="text" class="color-text"
+                 [value]="currentStyle.borderColor"
+                 (change)="onBorderColor($any($event.target).value)">
+        </div>
+      </div>
+
+      <div class="border-grid">
+        <label class="field-label">Top</label>
+        <select class="field-select" [value]="currentStyle.borderTop"
+                (change)="onBorderStyle('borderTop', $any($event.target).value)">
+          <option value="none">None</option>
+          <option value="1px solid">Solid 1px</option>
+          <option value="2px solid">Solid 2px</option>
+          <option value="1px dashed">Dashed</option>
+          <option value="1px dotted">Dotted</option>
+        </select>
+
+        <label class="field-label">Right</label>
+        <select class="field-select" [value]="currentStyle.borderRight"
+                (change)="onBorderStyle('borderRight', $any($event.target).value)">
+          <option value="none">None</option>
+          <option value="1px solid">Solid 1px</option>
+          <option value="2px solid">Solid 2px</option>
+          <option value="1px dashed">Dashed</option>
+          <option value="1px dotted">Dotted</option>
+        </select>
+
+        <label class="field-label">Bottom</label>
+        <select class="field-select" [value]="currentStyle.borderBottom"
+                (change)="onBorderStyle('borderBottom', $any($event.target).value)">
+          <option value="none">None</option>
+          <option value="1px solid">Solid 1px</option>
+          <option value="2px solid">Solid 2px</option>
+          <option value="1px dashed">Dashed</option>
+          <option value="1px dotted">Dotted</option>
+        </select>
+
+        <label class="field-label">Left</label>
+        <select class="field-select" [value]="currentStyle.borderLeft"
+                (change)="onBorderStyle('borderLeft', $any($event.target).value)">
+          <option value="none">None</option>
+          <option value="1px solid">Solid 1px</option>
+          <option value="2px solid">Solid 2px</option>
+          <option value="1px dashed">Dashed</option>
+          <option value="1px dotted">Dotted</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Spacing -->
+  <div class="panel-section">
+    <div class="section-header" (click)="toggleSpacing()">
+      <span class="section-title">Spacing</span>
+      <svg class="chevron" [class.chevron--open]="spacingExpanded" width="12" height="12" viewBox="0 0 12 12">
+        <path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.4"
+              stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="section-body" *ngIf="spacingExpanded">
+      <div class="field-row">
+        <label class="field-label">Padding X</label>
+        <div class="field-input-row">
+          <input class="field-input field-input--sm" type="number" min="0" max="40"
+                 [value]="currentStyle.paddingX"
+                 (change)="onPaddingX($any($event.target).value)">
+          <span class="field-unit">px</span>
+        </div>
+      </div>
+      <div class="field-row">
+        <label class="field-label">Padding Y</label>
+        <div class="field-input-row">
+          <input class="field-input field-input--sm" type="number" min="0" max="40"
+                 [value]="currentStyle.paddingY"
+                 (change)="onPaddingY($any($event.target).value)">
+          <span class="field-unit">px</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table-level defaults -->
+  <div class="panel-section">
+    <div class="section-header">
+      <span class="section-title">Table Defaults</span>
+    </div>
+    <div class="section-body">
+      <div class="field-row">
+        <label class="field-label">Table background</label>
+        <div class="color-row">
+          <input type="color" class="color-swatch"
+                 [value]="state.tableStyle.bgColor"
+                 (input)="onTableBgColor($any($event.target).value)">
+          <input type="text" class="color-text"
+                 [value]="state.tableStyle.bgColor"
+                 (change)="onTableBgColor($any($event.target).value)">
+        </div>
+      </div>
+      <div class="field-row">
+        <label class="field-label">Table border color</label>
+        <div class="color-row">
+          <input type="color" class="color-swatch"
+                 [value]="state.tableStyle.borderColor"
+                 (input)="onTableBorderColor($any($event.target).value)">
+          <input type="text" class="color-text"
+                 [value]="state.tableStyle.borderColor"
+                 (change)="onTableBorderColor($any($event.target).value)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

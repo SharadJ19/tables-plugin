@@ -1,0 +1,7 @@
+<div
+  class="resize-handle"
+  [class.resize-handle--vertical]="orientation === 'vertical'"
+  [class.resize-handle--horizontal]="orientation === 'horizontal'"
+  [class.resize-handle--dragging]="isDragging"
+  (mousedown)="onMouseDown($event)">
+</div>

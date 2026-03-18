@@ -1,0 +1,17 @@
+<div class="cell-inner" [class.cell-inner--editing]="isEditing">
+  <!-- Display mode -->
+  <span class="cell-display" *ngIf="!isEditing">{{ content }}</span>
+
+  <!-- Edit mode -->
+  <textarea
+    *ngIf="isEditing"
+    #textarea
+    class="cell-textarea"
+    [value]="editValue"
+    (input)="onInput($event)"
+    (keydown)="onKeyDown($event)"
+    (blur)="onBlur()"
+    rows="1"
+    appAutoFocus>
+  </textarea>
+</div>

@@ -1,0 +1,133 @@
+.canvas-wrapper {
+  display: inline-block;
+  outline: none;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  border-radius: 4px;
+  overflow: visible;
+  user-select: none;
+}
+
+.design-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* Row header column */
+.row-header-col {
+  width: 36px;
+}
+
+/* Column header row */
+.col-header-row {
+  height: 28px;
+}
+
+.corner-cell {
+  width: 36px;
+  height: 28px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  color: #9ca3af;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #FF9100;
+  }
+}
+
+.col-header {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  font-size: 11px;
+  font-weight: 500;
+  color: #9ca3af;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  position: relative;
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+
+  &--selected {
+    background: #fff7ed;
+    color: #FF9100;
+    border-color: #fdba74;
+  }
+}
+
+/* Row header */
+.row-header {
+  width: 36px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    background: #f3f4f6;
+  }
+
+  &--selected {
+    background: #fff7ed;
+    border-color: #fdba74;
+  }
+}
+
+.row-header-label {
+  font-size: 11px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.row-header-h {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  background: #FF9100;
+  color: #fff;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* Data cells */
+.table-cell-wrapper {
+  position: relative;
+  cursor: cell;
+  overflow: hidden;
+  vertical-align: middle;
+
+  &--selected {
+    outline: 2px solid #FF9100;
+    outline-offset: -1px;
+    z-index: 1;
+  }
+
+  &--focused {
+    outline: 2px solid #FF9100;
+    outline-offset: -1px;
+    z-index: 2;
+    box-shadow: 0 0 0 3px rgba(255, 145, 0, 0.15);
+  }
+}

@@ -1,0 +1,84 @@
+<div class="canvas-wrapper" tabindex="0" *ngIf="state">
+  <table class="design-table" [style.border-collapse]="'collapse'">
+    <!-- Column group for widths -->
+    <colgroup>
+      <col class="row-header-col">
+      <col *ngFor="let col of state.columns; trackBy: trackById"
+           [style.width.px]="getColWidth(col.id)">
+    </colgroup>
+
+    <!-- Column headers (corner + col labels) -->
+    <thead>
+      <tr class="col-header-row">
+        <!-- Corner cell: select all -->
+        <th class="corner-cell" (click)="onSelectAll()" title="Select all">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <rect x="1" y="1" width="8" height="8" rx="1.5"
+                  stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </th>
+
+        <!-- Per-column header -->
+        <th *ngFor="let col of state.columns; let ci = index; trackBy: trackById"
+            class="col-header"
+            [class.col-header--selected]="isSelected(state.rows[0]?.id, col.id)"
+            (click)="onColHeaderClick($event, col.id)">
+          <span>{{ ci + 1 }}</span>
+          <!-- Col resize handle -->
+          <app-resize-handle
+            [orientation]="'vertical'"
+            [currentSize]="getColWidth(col.id)"
+            (resizing)="onColResizing(col.id, $event)"
+            (resizeEnd)="onColResizeEnd(col.id, $event)">
+          </app-resize-handle>
+        </th>
+      </tr>
+    </thead>
+
+    <!-- Table body -->
+    <tbody>
+      <tr *ngFor="let row of state.rows; let ri = index; trackBy: trackById"
+          class="table-row"
+          [style.height.px]="getRowHeight(row.id)">
+
+        <!-- Row header -->
+        <td class="row-header"
+            [class.row-header--selected]="isSelected(row.id, state.columns[0]?.id)"
+            (click)="onRowHeaderClick($event, row.id)">
+          <span class="row-header-label">
+            <span *ngIf="row.isHeader" class="row-header-h">H</span>
+            <span *ngIf="!row.isHeader">{{ ri + 1 }}</span>
+          </span>
+          <!-- Row resize handle -->
+          <app-resize-handle
+            [orientation]="'horizontal'"
+            [currentSize]="getRowHeight(row.id)"
+            (resizing)="onRowResizing(row.id, $event)"
+            (resizeEnd)="onRowResizeEnd(row.id, $event)">
+          </app-resize-handle>
+        </td>
+
+        <!-- Data cells -->
+        <td *ngFor="let col of state.columns; trackBy: trackById"
+            class="table-cell-wrapper"
+            [class.table-cell-wrapper--selected]="isSelected(row.id, col.id)"
+            [class.table-cell-wrapper--focused]="isFocused(row.id, col.id)"
+            [ngStyle]="getCellStyles(row.id, col.id)"
+            (mousedown)="onCellMouseDown($event, row.id, col.id)"
+            (mouseenter)="onCellMouseEnter(row.id, col.id)"
+            (dblclick)="onCellDoubleClick(row.id, col.id)">
+
+          <app-table-cell
+            [rowId]="row.id"
+            [colId]="col.id"
+            [content]="state.cells[row.id + '-' + col.id]?.content || ''"
+            [isEditing]="isEditing(row.id, col.id)"
+            [style]="getCellStyles(row.id, col.id)"
+            (contentChange)="onCellContentChange(row.id, col.id, $event)"
+            (editDone)="exitEdit()">
+          </app-table-cell>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

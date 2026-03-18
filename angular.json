@@ -27,6 +27,7 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
+              "src/favicon_black.svg",
               "src/assets"
             ],
             "styles": [
@@ -60,6 +61,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "port": 4220
+          },
           "configurations": {
             "production": {
               "buildTarget": "tables-app:build:production"

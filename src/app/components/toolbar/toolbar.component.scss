@@ -1,0 +1,175 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 12px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 4px;
+  user-select: none;
+  position: relative;
+}
+
+.toolbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #1a1a1a;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.brand-icon {
+  font-size: 18px;
+  color: #FF9100;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 22px;
+  background: #e5e7eb;
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  position: relative;
+}
+
+.tb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #374151;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s;
+
+  &:hover:not(:disabled) {
+    background: #f3f4f6;
+  }
+
+  &:active:not(:disabled) {
+    background: #e5e7eb;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.tb-btn--accent {
+  background: #FF9100;
+  color: #ffffff;
+  font-weight: 500;
+
+  &:hover:not(:disabled) {
+    background: #e8830a;
+  }
+
+  &:active:not(:disabled) {
+    background: #d07400;
+  }
+}
+
+.tb-btn--danger {
+  color: #dc2626;
+  font-size: 12px;
+
+  &:hover {
+    background: #fef2f2;
+  }
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+/* Dropdown */
+.toolbar-dropdown-host {
+  position: relative;
+}
+
+.toolbar-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 180px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  padding: 4px 0;
+
+  &--right {
+    left: auto;
+    right: 0;
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.1s;
+
+  &:hover {
+    background: #f9fafb;
+    color: #111827;
+  }
+
+  &--upload {
+    cursor: pointer;
+  }
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 4px 0;
+}
+
+.theme-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.tb-btn--green {
+  background: #16a34a;
+  color: #ffffff;
+  font-weight: 500;
+
+  &:hover:not(:disabled) {
+    background: #15803d;
+  }
+
+  &:active:not(:disabled) {
+    background: #166534;
+  }
+}

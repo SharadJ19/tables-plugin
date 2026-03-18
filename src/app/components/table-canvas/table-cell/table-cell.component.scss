@@ -1,0 +1,46 @@
+.cell-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: inherit;
+  overflow: hidden;
+
+  &--editing {
+    overflow: visible;
+  }
+}
+
+.cell-display {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre-wrap;
+  word-break: break-word;
+  pointer-events: none;
+  line-height: 1.4;
+}
+
+.cell-textarea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+  padding: inherit;
+  border: none;
+  outline: none;
+  resize: none;
+  background: #fffbf2;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  text-align: inherit;
+  line-height: 1.4;
+  box-sizing: border-box;
+  z-index: 10;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
