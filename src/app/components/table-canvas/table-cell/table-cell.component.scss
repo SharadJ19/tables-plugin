@@ -31,7 +31,7 @@
   border: none;
   outline: none;
   resize: none;
-  background: #fffbf2;
+  background:inherit;
   color: inherit;
   font-size: inherit;
   font-family: inherit;
@@ -41,6 +41,7 @@
   line-height: 1.4;
   box-sizing: border-box;
   z-index: 10;
-  overflow: hidden;
+  overflow-y: auto;
+  max-height: 200px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }

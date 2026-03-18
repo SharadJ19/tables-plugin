@@ -49,19 +49,25 @@ export class TableCellComponent implements OnChanges {
     this.contentChange.emit(this.editValue);
   }
 
-  onKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Escape') {
-      event.stopPropagation();
-      this.editDone.emit();
-      return;
-    }
-    // Let Enter, Tab, Arrow keys bubble up to canvas
-    if (['Enter', 'Tab', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
-      event.stopPropagation();
-      this.contentChange.emit(this.editValue);
-      this.editDone.emit();
-    }
+onKeyDown(event: KeyboardEvent): void {
+  if (event.key === 'Escape') {
+    event.stopPropagation();
+    this.editDone.emit();
   }
+
+  // Shift+Enter = newline (let textarea handle it natively)
+  if (event.key === 'Enter' && event.shiftKey) {
+    event.stopPropagation(); // don't bubble to canvas
+    // Let browser insert \n into textarea natively — do nothing else
+    return;
+  }
+
+  if (['Enter', 'Tab', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+    event.stopPropagation();
+    this.contentChange.emit(this.editValue);
+    this.editDone.emit();
+  }
+}
 
   onBlur(): void {
     this.contentChange.emit(this.editValue);

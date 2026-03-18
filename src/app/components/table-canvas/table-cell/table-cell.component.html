@@ -7,6 +7,8 @@
     *ngIf="isEditing"
     #textarea
     class="cell-textarea"
+    [style.background]="style['background-color']"
+    [style.color]="style['color']"
     [value]="editValue"
     (input)="onInput($event)"
     (keydown)="onKeyDown($event)"
