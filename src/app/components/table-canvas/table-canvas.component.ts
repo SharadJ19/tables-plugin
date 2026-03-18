@@ -173,30 +173,41 @@ export class TableCanvasComponent implements OnInit, OnDestroy {
 
   onRowHeaderClick(event: MouseEvent, rowId: string): void {
     this.exitEdit();
-    this.selectionService.selectRow(
-      rowId,
-      this.state.columns.map((c: ColumnDef) => c.id),
-      event.shiftKey,
-    );
+    const colIds = this.state.columns.map((c: ColumnDef) => c.id);
+    if (
+      !event.shiftKey &&
+      this.selectionService.isRowFullySelected(rowId, colIds)
+    ) {
+      this.selectionService.clear();
+    } else {
+      this.selectionService.selectRow(rowId, colIds, event.shiftKey);
+    }
     this.cdr.markForCheck();
   }
 
   onColHeaderClick(event: MouseEvent, colId: string): void {
     this.exitEdit();
-    this.selectionService.selectColumn(
-      colId,
-      this.state.rows.map((r: RowDef) => r.id),
-      event.shiftKey,
-    );
+    const rowIds = this.state.rows.map((r: RowDef) => r.id);
+    if (
+      !event.shiftKey &&
+      this.selectionService.isColumnFullySelected(colId, rowIds)
+    ) {
+      this.selectionService.clear();
+    } else {
+      this.selectionService.selectColumn(colId, rowIds, event.shiftKey);
+    }
     this.cdr.markForCheck();
   }
 
   onSelectAll(): void {
     this.exitEdit();
-    this.selectionService.selectAll(
-      this.state.rows.map((r: RowDef) => r.id),
-      this.state.columns.map((c: ColumnDef) => c.id),
-    );
+    const rowIds = this.state.rows.map((r: RowDef) => r.id);
+    const colIds = this.state.columns.map((c: ColumnDef) => c.id);
+    if (this.selectionService.isAllSelected(rowIds, colIds)) {
+      this.selectionService.clear();
+    } else {
+      this.selectionService.selectAll(rowIds, colIds);
+    }
     this.cdr.markForCheck();
   }
 

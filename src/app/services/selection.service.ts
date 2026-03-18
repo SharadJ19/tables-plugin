@@ -99,4 +99,18 @@ export class SelectionService {
   getType(): SelectionType {
     return this.snapshot.type;
   }
+
+  // After isSelected() method, add:
+  isRowFullySelected(rowId: string, colIds: string[]): boolean {
+    return colIds.every(c => this.snapshot.cellKeys.has(cellKey(rowId, c)));
+  }
+
+  isColumnFullySelected(colId: string, rowIds: string[]): boolean {
+    return rowIds.every(r => this.snapshot.cellKeys.has(cellKey(r, colId)));
+  }
+
+  isAllSelected(rowIds: string[], colIds: string[]): boolean {
+    return rowIds.every(r => colIds.every(c => this.snapshot.cellKeys.has(cellKey(r, c))));
+  }
+
 }
