@@ -31,12 +31,12 @@ export class TableStateService {
 
     // Capture history 300ms after user stops typing
     this.contentDebounce$
-      .pipe(debounceTime(300))
+      .pipe(debounceTime(150))
       .subscribe(() => this.history.push(this.snapshot));
 
     // Capture history 200ms after user stops picking color/style
     this.styleDebounce$
-      .pipe(debounceTime(200))
+      .pipe(debounceTime(100))
       .subscribe(() => this.history.push(this.snapshot));
 
   }
