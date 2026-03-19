@@ -294,7 +294,7 @@ export class TableCanvasComponent implements OnInit, OnDestroy {
           !event.ctrlKey &&
           !event.metaKey
         ) {
-          this.enterEdit(rowId, colId, true);
+          this.enterEdit(rowId, colId, false);
         }
     }
     this.cdr.markForCheck();
