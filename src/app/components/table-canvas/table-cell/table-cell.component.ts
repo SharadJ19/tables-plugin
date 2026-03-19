@@ -35,8 +35,9 @@ export class TableCellComponent implements OnChanges {
           if (ta) {
             ta.focus();
             // Place cursor at end
-            ta.setSelectionRange(0, 0);
-            ta.scrollTop = 0;
+            const len = ta.value.length;
+            ta.setSelectionRange(len, len);
+            ta.scrollTop = ta.scrollHeight;
           }
         }, 0);
       }
